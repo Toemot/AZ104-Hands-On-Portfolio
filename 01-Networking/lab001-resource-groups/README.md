@@ -151,41 +151,12 @@ az group show --name rg-learning-hub --query tags
 **Exported JSON:**
 - `resource-groups-exported.json` - Output from `az group list --query "[?tags.Environment=='Dev']"` showing all 3 RGs with their properties
 
-**Screenshots (LOCAL USE ONLY - CONFIDENTIAL):**
-- Screenshot 1: All 3 resource groups listed in portal (with BCH tags)
-- Screenshot 2: rg-learning-hub details showing all 6 BCH tags
-- Screenshot 3: rg-learning-hub after removing BCHOCostCenter (break scenario)
-- Screenshot 4: rg-learning-hub after restoring tags (fix scenario)
-
-**For Social Media (if creating content):**
-- Create anonymized versions with generic naming (rg-demo-hub instead of BCH-specific names)
-- Blur or redact cost centers, team names, and classification levels
-- Focus on demonstrating the technical process, not the organizational details
-
 **Documentation:**
 - `commands.sh` - All commands typed in this lab (for reference)
 - `README.md` - This detailed analysis
 - `../exports/resource-groups.json` - Original JSON export from Step 3
 
-**Portfolio Use:**
-- All files kept in private GitHub repo for hiring managers and interviewers (who understand confidentiality)
-
 ---
 
-## ✍️ Reflection
-
-**What I learned:**
-[Write your personal notes - what surprised you? what clicked?]
-
-**How this helps consulting:**
-[How would you explain this to a client?]
-
-**Next steps:**
-[What are you curious about? What do you want to explore next?]
-
----
-
-**Lab completed:** [Today's date]  
-**Commands typed:** [Count how many you typed]  
-**Time spent:** [Actual time]
+**Lab completed:** 24/8/2026 
 
