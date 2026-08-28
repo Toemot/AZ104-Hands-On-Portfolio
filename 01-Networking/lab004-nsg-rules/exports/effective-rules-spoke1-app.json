@@ -1,0 +1,46 @@
+﻿# Effective Rules Analysis - Spoke1 App Subnet
+
+## Configured Rules (Priority 100-4096)
+
+| Priority | Name | Direction | Access | Protocol | Source | DestPort |
+|----------|------|-----------|--------|----------|--------|----------|
+| 100 | Allow-HTTPS-Inbound | Inbound | Allow | TCP | Internet | 443 |
+| 110 | Allow-SSH-From-Hub | Inbound | Allow | TCP | 10.0.0.0/24 | 22 |
+| 100 | Allow-SQL-To-DB-Subnet | Outbound | Allow | TCP | * | 1433 (to 10.1.1.0/24) |
+
+## Default Rules (Priority 65000+)
+
+| Priority | Name | Direction | Access | Protocol | Source | Dest | DestPort |
+|----------|------|-----------|--------|----------|--------|------|----------|
+| 65000 | AllowVNetInBound | Inbound | Allow | All | VirtualNetwork | VirtualNetwork | * |
+| 65001 | AllowAzureLoadBalancerInBound | Inbound | Allow | All | AzureLoadBalancer | * | * |
+| 65500 | DenyAllInBound | Inbound | **DENY** | All | * | * | * |
+
+## Evaluation Flow Example
+
+**Scenario:** Internet client tries to reach 10.1.0.4 on port 443
+
+1. Check Priority 100: Allow-HTTPS-Inbound (Source: Internet, Port: 443)
+   - **MATCH** → **ALLOW** ✅
+   - Stop evaluation (first match wins)
+
+**Scenario:** Internet client tries to reach 10.1.0.4 on port 80
+
+1. Check Priority 100: Allow-HTTPS-Inbound (Source: Internet, Port: 443)
+   - **NO MATCH** (port 80 ≠ 443)
+2. Check Priority 110: Allow-SSH-From-Hub (Source: 10.0.0.0/24, Port: 22)
+   - **NO MATCH** (source = Internet, not 10.0.0.0/24)
+3. Check Priority 65000: AllowVNetInBound (Source: VirtualNetwork)
+   - **NO MATCH** (source = Internet, not VirtualNetwork)
+4. Check Priority 65001: AllowAzureLoadBalancerInBound
+   - **NO MATCH**
+5. Check Priority 65500: DenyAllInBound
+   - **MATCH** → **DENY** ❌
+
+**Result:** Traffic blocked. This is "deny by default" in action.
+
+## Exam Question Pattern
+
+> "You configured NSG to allow port 443. Port 80 traffic is blocked. Why?"
+
+**Answer:** Deny by default. Rule 100 allows 443, but no rule allows 80. Default rule 65500 (DenyAllInBound) blocks all unmatched traffic. To allow 80, add explicit allow rule.
